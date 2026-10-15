@@ -4,8 +4,14 @@ import type { Organization, OrganizationStatus } from '../types/organization';
 import type { HospitalStaff, CreateStaffInput } from '../types/staff';
 import { localEventBus } from '../sync/localEventBus';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://fhnyhsoykmbjingtvcul.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobnloc295a21iamluZ3R2Y3VsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwMDc1ODksImV4cCI6MjEwNjU4MzU4OX0.LZbaCGEK21j-cATaPCL5YqV9V2SuS2p1POtl8utBFvg';
+const envUrl = import.meta.env.VITE_SUPABASE_URL;
+const envAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const isPlaceholderUrl = !envUrl || envUrl.includes('your-project') || !envUrl.startsWith('http');
+const isPlaceholderKey = !envAnonKey || envAnonKey === 'your-anon-key';
+
+const supabaseUrl = !isPlaceholderUrl ? envUrl : 'https://fhnyhsoykmbjingtvcul.supabase.co';
+const supabaseAnonKey = !isPlaceholderKey ? envAnonKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobnloc295a21iamluZ3R2Y3VsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwMDc1ODksImV4cCI6MjEwNjU4MzU4OX0.LZbaCGEK21j-cATaPCL5YqV9V2SuS2p1POtl8utBFvg';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {

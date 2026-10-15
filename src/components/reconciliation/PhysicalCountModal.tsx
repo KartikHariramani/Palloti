@@ -10,14 +10,11 @@ interface PhysicalCountModalProps {
   onConfirmAdjustment: (bloodGroup: BloodGroup, physicalCount: number, reason: string, notes: string) => Promise<void>;
 }
 
-export const PhysicalCountModal: React.FC<PhysicalCountModalProps> = ({
-  isOpen,
-  onClose,
-  record,
-  onConfirmAdjustment,
-}) => {
-  if (!isOpen || !record) return null;
-
+const PhysicalCountModalContent: React.FC<{
+  record: ReconciliationRecord;
+  onClose: () => void;
+  onConfirmAdjustment: (bloodGroup: BloodGroup, physicalCount: number, reason: string, notes: string) => Promise<void>;
+}> = ({ record, onClose, onConfirmAdjustment }) => {
   const [physicalCount, setPhysicalCount] = useState<number>(record.verifiedPhysicalStock);
   const [reason, setReason] = useState<string>('Routine bi-weekly cold storage physical reconciliation');
   const [notes, setNotes] = useState<string>('Physical inventory verified by charge technician in blood bank ward.');
@@ -207,5 +204,22 @@ export const PhysicalCountModal: React.FC<PhysicalCountModalProps> = ({
         </form>
       </div>
     </div>
+  );
+};
+
+export const PhysicalCountModal: React.FC<PhysicalCountModalProps> = ({
+  isOpen,
+  onClose,
+  record,
+  onConfirmAdjustment,
+}) => {
+  if (!isOpen || !record) return null;
+
+  return (
+    <PhysicalCountModalContent
+      record={record}
+      onClose={onClose}
+      onConfirmAdjustment={onConfirmAdjustment}
+    />
   );
 };
